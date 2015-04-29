@@ -111,7 +111,14 @@ object BroadcastRegionJoin extends RegionJoin {
 
     // each element of the left-side RDD should have exactly one partition.
     val smallerKeyed: RDD[(ReferenceRegion, (ReferenceRegion, T))] =
-      baseRDD.map(t => (regions.value.regionsFor(t).head, t))
+      baseRDD.flatMap(t => {
+        val r = regions.value.regionsFor(t)
+        if (r.size > 0) {
+          Some((r.head, t))
+        } else {
+          None
+        }
+      })
 
     // each element of the right-side RDD may have 0, 1, or more than 1 corresponding partition.
     val largerKeyed: RDD[(ReferenceRegion, (ReferenceRegion, U))] =
