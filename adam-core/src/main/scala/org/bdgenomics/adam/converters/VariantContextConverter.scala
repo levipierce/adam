@@ -233,7 +233,10 @@ class VariantContextConverter(dict: Option[SequenceDictionary] = None) extends S
         if (g.hasDP) genotype.setReadDepth(g.getDP)
         if (g.hasAD) {
           val ad = g.getAD
+          /*
           genotype.setReferenceReadDepth(ad(0)).setAlternateReadDepth(ad(1))
+            */
+          genotype.setReferenceReadDepth(ad(0)).setAlternateReadDepth(-1)
         }
         setPL(g, genotype)
 
